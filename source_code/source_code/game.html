@@ -1,0 +1,697 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kuis Elektromagnetik: Pemburu Monster</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Press+Start+2P&display=swap" rel="stylesheet">
+    <!-- MathJax for LaTeX rendering -->
+    <script type="text/javascript" id="MathJax-script" async
+        src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+    </script>
+    <script>
+        // Configure MathJax to process LaTeX enclosed in $...$ or $$...$$
+        MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']]
+            },
+            svg: {
+                fontCache: 'global'
+            }
+        };
+    </script>
+</head>
+<body>
+    <!-- Main Menu Container -->
+    <div id="mainMenuContainer" class="main-menu-container">
+        <h1>KUIS ELEKTROMAGNETIK: PEMBURU MONSTER</h1>
+        <div class="mode-map-grid">
+            <div class="map-location" onclick="selectModeAndStart('Hukum Maxwell bentuk integral')">
+                <div class="map-icon">
+                    <!-- Icon: Loop Integral / Surface Flux -->
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <path d="M12 8L16 12L12 16"></path>
+                        <path d="M8 12H16"></path>
+                    </svg>
+                </div>
+                <span class="map-title">Hukum Maxwell Bentuk Integral</span>
+            </div>
+            <div class="map-location" onclick="selectModeAndStart('Hukum Maxwell bentuk diferensial')">
+                <div class="map-icon">
+                    <!-- Icon: Divergence / Curl (Nabla Operator) -->
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="2"></circle>
+                        <line x1="12" y1="12" x2="16" y2="8"></line>
+                        <line x1="12" y1="12" x2="16" y2="16"></line>
+                        <line x1="12" y1="12" x2="8" y2="8"></line>
+                        <line x1="12" y1="12" x2="8" y2="16"></line>
+                    </svg>
+                </div>
+                <span class="map-title">Hukum Maxwell Bentuk Diferensial</span>
+            </div>
+            <div class="map-location" onclick="selectModeAndStart('Hukum Maxwell bukan di udara')">
+                <div class="map-icon">
+                    <!-- Icon: Material Block / Medium -->
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12.89 1.45l8 4A2 2 0 0 1 22 7.24v9.52a2 2 0 0 1-1.11 1.79l-8 4a2 2 0 0 1-1.78 0l-8-4a2 2 0 0 1-1.11-1.79V7.24a2 2 0 0 1 1.11-1.79l8-4a2 2 0 0 1 1.78 0z"></path>
+                        <polyline points="2.32 6.55 12 11.08 21.69 6.55"></polyline>
+                        <polyline points="12 22.42 12 11.08"></polyline>
+                    </svg>
+                </div>
+                <span class="map-title">Hukum Maxwell Bukan di Udara</span>
+            </div>
+            <div class="map-location" onclick="selectModeAndStart('Gelombang datar menumbuk perbatasan secara normal')">
+                <div class="map-icon">
+                    <!-- Icon: Normal Incidence Wave -->
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="12" y1="5" x2="12" y2="19"></line> <!-- Barrier -->
+                        <line x1="4" y1="12" x2="12" y2="12"></line> <!-- Arrow body -->
+                        <polyline points="9 9 12 12 9 15"></polyline> <!-- Arrow head -->
+                    </svg>
+                </div>
+                <span class="map-title">Gelombang Datar Menumbuk Perbatasan Secara Normal</span>
+            </div>
+            <div class="map-location" onclick="selectModeAndStart('Gelombang datar menumbuk perbatasan secara sembarang')">
+                <div class="map-icon">
+                    <!-- Icon: Oblique Incidence Wave -->
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="12" y1="5" x2="12" y2="19"></line> <!-- Barrier -->
+                        <line x1="4" y1="19" x2="12" y2="12"></line> <!-- Angled arrow body -->
+                        <polyline points="9 15 12 12 9 9"></polyline> <!-- Angled arrow head -->
+                    </svg>
+                </div>
+                <span class="map-title">Gelombang Datar Menumbuk Perbatasan Secara Sembarang</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quiz Container (Hidden by default) -->
+    <div id="quizContainer" class="quiz-container hidden">
+        <div class="header">
+            <div>Nyawa: <span id="lives">3</span> ❤️</div>
+            <div>Poin: <span id="points">0</span> ⭐</div>
+        </div>
+
+        <!-- Monster Display Area -->
+        <div id="monsterDisplay" class="monster-display-area">
+            <h2 id="monsterName"></h2>
+            <img id="monsterImage" src="" alt="Monster" class="monster-img">
+            <div class="monster-health-bar-container">
+                <div id="monsterHealthBar" class="monster-health-bar"></div>
+            </div>
+            <p id="monsterDescription" class="monster-description"></p>
+            <p id="monsterQuestionCounter" class="monster-question-counter"></p>
+        </div>
+
+        <div class="progress-bar-container">
+            <div class="progress-bar" id="progressBar"></div>
+        </div>
+        <div class="question-section">
+            <p class="question-text" id="questionText"></p>
+            <div class="options-container" id="optionsContainer"></div>
+            <p class="feedback-message" id="feedbackMessage"></p>
+        </div>
+        <div class="controls">
+            <button class="control-button" id="hintButton">Petunjuk (10 Poin)</button>
+            <button class="control-button" id="restartButton" style="display: none;">Mulai Ulang</button>
+        </div>
+    </div>
+
+    <div id="messageBox" class="message-box">
+        <p id="messageText"></p>
+        <button id="messageBoxButton">OK</button>
+    </div>
+
+    <script type="module">
+
+        // Quiz questions categorized by mode and then by monster
+        const questionBank = {
+            "Hukum Maxwell bentuk integral": {
+                monsters: [
+                    {
+                        name: "Snake",
+                        image: "https://i.imgur.com/OnimH3O.png", // Placeholder image
+                        description: "Droid pengintai yang rentan terhadap dasar-dasar elektromagnetik.",
+                        pointsBonus: 20,
+                        questions: [
+                            { question: "Teorema apa yang menghubungkan sirkulasi medan vektor dengan fluks curl-nya?", options: ["Teorema Divergensi", "Teorema Stokes", "Hukum Gauss", "Hukum Ampere"], answer: "Teorema Stokes", hint: "Teorema ini mengubah integral garis menjadi integral permukaan." },
+                            { question: "Teorema apa yang menghubungkan fluks medan vektor melalui permukaan tertutup dengan divergensi medan di dalam volume?", options: ["Teorema Divergensi (Hukum Gauss)", "Teorema Stokes", "Hukum Faraday", "Hukum Kirchhoff"], answer: "Teorema Divergensi (Hukum Gauss)", hint: "Ini adalah dasar untuk Hukum Gauss." },
+                            { question: "Bentuk integral Hukum Faraday menyatakan bahwa gaya gerak listrik (EMF) berbanding lurus dengan laju perubahan waktu dari apa?", options: ["Fluks listrik", "Fluks magnetik", "Arus listrik", "Kepadatan muatan"], answer: "Fluks magnetik", hint: "Ini adalah prinsip dasar induksi elektromagnetik." },
+                            { question: "Bentuk integral Hukum Gauss untuk medan listrik menyatakan bahwa fluks listrik total yang melewati permukaan tertutup sebanding dengan apa?", options: ["Kepadatan arus", "Muatan total di dalam permukaan", "Potensial skalar", "Kerapatan daya"], answer: "Muatan total di dalam permukaan", hint: "Berkaitan dengan sumber medan listrik." }
+                        ]
+                    },
+                    {
+                        name: "Hyena",
+                        image: "https://i.imgur.com/QoBseW3.png", // Placeholder image
+                        description: "Parasit yang menyerap energi, lumpuhkan dengan pengetahuan hukum dasar.",
+                        pointsBonus: 30,
+                        questions: [
+                            { question: "Hukum Ampere dalam bentuk integral, sebelum penambahan term arus perpindahan Maxwell, berlaku untuk medan apa saja?", options: ["Hanya medan listrik statis", "Hanya medan magnetostatik", "Medan yang berubah terhadap waktu", "Hanya medan gravitasi"], answer: "Hanya medan magnetostatik", hint: "Ini adalah versi awal hukum tersebut." },
+                            { question: "Term arus perpindahan (displacement current) ditambahkan oleh Maxwell ke Hukum Ampere untuk menjelaskan apa?", options: ["Arus konduksi dalam konduktor", "Aliran muatan dalam vakum", "Pembentukan medan magnetik oleh medan listrik yang berubah terhadap waktu", "Konservasi energi"], answer: "Pembentukan medan magnetik oleh medan listrik yang berubah terhadap waktu", hint: "Inovasi utama Maxwell." },
+                            { question: "Integral garis tertutup dari medan listrik $\\mathbf{E}$ sama dengan laju negatif perubahan fluks magnetik melalui permukaan yang dibatasi oleh loop tersebut. Ini adalah pernyataan integral dari hukum apa?", options: ["Hukum Gauss untuk medan magnetik", "Hukum Ampere", "Hukum Faraday", "Persamaan Kontinuitas"], answer: "Hukum Faraday", hint: "Menjelaskan induksi elektromagnetik." }
+                        ]
+                    },
+                    {
+                        name: "Scorpion",
+                        image: "https://i.imgur.com/p8vy4lG.png", // Placeholder image
+                        description: "Mesin kuno yang mengganggu medan, hentikan dengan pemahaman lengkap Maxwell.",
+                        pointsBonus: 50,
+                        questions: [
+                            { question: "Dalam bentuk integral, $\\oint_S \\mathbf{D} \\cdot d\\mathbf{S} = Q_{enc}$ dikenal sebagai hukum apa?", options: ["Hukum Gauss untuk medan listrik", "Hukum Gauss untuk medan magnetik", "Hukum Ampere", "Hukum Faraday"], answer: "Hukum Gauss untuk medan listrik", hint: "Mengaitkan fluks listrik dengan muatan." },
+                            { question: "Hukum Maxwell mana yang menyatakan bahwa tidak ada monopoli magnetik?", options: ["Hukum Gauss untuk medan listrik", "Hukum Gauss untuk medan magnetik", "Hukum Ampere", "Hukum Faraday"], answer: "Hukum Gauss untuk medan magnetik", hint: "Ini adalah salah satu persamaan yang paling simetris." },
+                            { question: "Vektor rapat arus $\\mathbf{J}$ dalam bentuk integral Hukum Ampere merepresentasikan apa?", options: ["Kerapatan fluks listrik", "Kerapatan fluks magnetik", "Kerapatan arus konduksi", "Kerapatan arus perpindahan"], answer: "Kerapatan arus konduksi", hint: "Ini adalah arus yang sebenarnya mengalir." }
+                        ]
+                    }
+                ]
+            },
+            "Hukum Maxwell bentuk diferensial": {
+                monsters: [
+                    {
+                        name: "Vulture",
+                        image: "https://i.imgur.com/UqPNixM.png", // Placeholder image
+                        description: "Anomali kuantum yang membingungkan, pecahkan teka-tekinya dengan analisis vektor.",
+                        pointsBonus: 20,
+                        questions: [
+                            { question: "Operasi medan vektor apa yang mengukur fluks bersih keluar per satuan volume pada titik mana pun?", options: ["Curl", "Gradient", "Divergence", "Laplacian"], answer: "Divergence", hint: "Ini sering dikaitkan dengan sumber atau 'sink' medan." },
+                            { question: "Operasi medan vektor apa yang mengukur sirkulasi per satuan area pada titik mana pun?", options: ["Divergence", "Gradient", "Curl", "Laplacian"], answer: "Curl", hint: "Ini terkait dengan rotasi atau 'pusaran' medan." },
+                            { question: "Persamaan Maxwell mana dalam bentuk diferensial yang menyatakan bahwa divergensi kerapatan fluks magnetik adalah nol?", options: ["$\\nabla \\cdot \\mathbf{D} = \\rho_v$", "$\\nabla \\cdot \\mathbf{B} = 0$", "$\\nabla \\times \\mathbf{E} = -\\frac{\\partial \\mathbf{B}}{\\partial t}$", "$\\nabla \\times \\mathbf{H} = \\mathbf{J} + \\frac{\\partial \\mathbf{D}}{\\partial t}$"], answer: "$\\nabla \\cdot \\mathbf{B} = 0$", hint: "Ini menyiratkan tidak adanya monopoli magnetik." },
+                            { question: "Dalam analisis vektor, kuantitas fisik yang sepenuhnya ditentukan oleh satu angka (besaran) saja disebut apa? (Bab 1.2)", options: ["Vektor", "Skalar", "Tensor", "Medan"], answer: "Skalar", hint: "Kuantitas ini tidak memiliki arah." }
+                        ]
+                    },
+                    {
+                        name: "Mummy",
+                        image: "https://i.imgur.com/x4ydt8r.png", // Placeholder image
+                        description: "Retakan antar dimensi, tutup dengan pemahaman mendalam tentang kalkulus vektor.",
+                        pointsBonus: 30,
+                        questions: [
+                            { question: "Dalam sistem koordinat Kartesian, elemen volume $dv$ diberikan oleh rumus apa? (Bab 1.3.1)", options: ["$p dp d\\phi dz$", "$r^2 \\sin\\theta dr d\\theta d\\phi$", "$dx dy dz$", "$dx dy$"], answer: "$dx dy dz$", hint: "Ini adalah sistem koordinat yang paling sederhana." },
+                            { question: "Bentuk diferensial Hukum Gauss untuk medan listrik adalah $\\nabla \\cdot \\mathbf{D} = \\rho_v$. Apa yang dilambangkan oleh $\\rho_v$?", options: ["Kerapatan fluks listrik", "Kerapatan muatan volume", "Kerapatan arus", "Kerapatan energi"], answer: "Kerapatan muatan volume", hint: "Ini adalah sumber medan listrik." },
+                            { question: "Persamaan kontinuitas dalam bentuk diferensial adalah $\\nabla \\cdot \\mathbf{J} = -\\frac{\\partial \\rho_v}{\\partial t}$. Persamaan ini menyatakan konservasi apa?", options: ["Energi", "Daya", "Muatan", "Medan"], answer: "Muatan", hint: "Muatan tidak dapat diciptakan atau dimusnahkan." }
+                        ]
+                    },
+                    {
+                        name: "Deceased",
+                        image: "https://i.imgur.com/hzDhxzZ.png", // Placeholder image
+                        description: "Inti singularitas yang memutar realitas, netralkan dengan teori medan elektromagnetik.",
+                        pointsBonus: 50,
+                        questions: [
+                            { question: "Bentuk diferensial Hukum Faraday adalah $\\nabla \\times \\mathbf{E} = -\\frac{\\partial \\mathbf{B}}{\\partial t}$. Operator curl ($\\nabla \\times$) menunjukkan apa tentang medan listrik yang dihasilkan oleh medan magnetik yang berubah?", options: ["Divergensi", "Rotasi", "Gradien", "Magnitude"], answer: "Rotasi", hint: "Ini adalah inti dari induksi." },
+                            { question: "Dalam bentuk diferensial, Hukum Ampere-Maxwell dinyatakan sebagai $\\nabla \\times \\mathbf{H} = \\mathbf{J} + \\frac{\\partial \\mathbf{D}}{\\partial t}$. Term $\\frac{\\partial \\mathbf{D}}{\\partial t}$ dikenal sebagai apa?", options: ["Arus konduksi", "Arus perpindahan", "Arus magnetisasi", "Arus konveksi"], answer: "Arus perpindahan", hint: "Ini memungkinkan gelombang EM di ruang hampa." },
+                            { question: "Operasi vektor $\\nabla$ yang diterapkan pada fungsi skalar menghasilkan apa?", options: ["Skalar", "Vektor", "Tensor", "Tidak ada"], answer: "Vektor", hint: "Ini menunjukkan arah perubahan terbesar." }
+                        ]
+                    }
+                ]
+            },
+            "Hukum Maxwell bukan di udara": {
+                monsters: [
+                    {
+                        name: "Snake",
+                        image: "https://i.imgur.com/OnimH3O.png", // Placeholder image
+                        description: "Makhluk yang mengubah properti material, kalahkan dengan pengetahuan dielektrik.",
+                        pointsBonus: 20,
+                        questions: [
+                            { question: "Hukum Coulomb menyatakan bahwa gaya antara dua muatan listrik berbanding terbalik dengan kuadrat jarak di antara mereka. Bagaimana arah gaya ini? (Bab 1.6.1)", options: ["Tegak lurus terhadap garis penghubung muatan", "Sepanjang garis penghubung muatan", "Berlawanan arah dengan medan listrik", "Sepanjang arah medan magnetik"], answer: "Sepanjang garis penghubung muatan", hint: "Pikirkan tentang gaya tarik-menarik atau tolak-menolak antara dua muatan." },
+                            { question: "Apa yang dimaksud dengan 'permittivity of air (vacuum)' yang dilambangkan dengan $\\epsilon_0$? (Bab 1.6.1)", options: ["Konstanta gravitasi", "Konstanta proporsionalitas", "Kemampuan udara (vakum) untuk menyimpan medan listrik", "Kekuatan medan magnetik"], answer: "Kemampuan udara (vakum) untuk menyimpan medan listrik", hint: "Ini terkait dengan seberapa baik suatu medium mendukung medan listrik." },
+                            { question: "Apa yang membedakan konduktor dari bahan dielektrik dalam hal muatan? (Bab 3.2)", options: ["Konduktor memiliki muatan terikat, dielektrik memiliki muatan bebas", "Konduktor memiliki muatan bebas, dielektrik memiliki muatan terikat", "Keduanya hanya memiliki muatan terikat", "Keduanya hanya memiliki muatan bebas"], answer: "Konduktor memiliki muatan bebas, dielektrik memiliki muatan terikat", hint: "Pikirkan tentang bagaimana arus mengalir di setiap jenis bahan." },
+                            { question: "Definisi 'magnetisasi M' dalam bahan magnetik adalah? (Bab 3.6)", options: ["Jumlah total arus per satuan volume", "Jumlah total momen dipol listrik per satuan volume", "Jumlah total momen dipol magnetik per satuan volume", "Kerapatan fluks magnetik per satuan volume"], answer: "Jumlah total momen dipol magnetik per satuan volume", hint: "Ini mengukur seberapa kuat bahan tersebut menjadi magnet." }
+                        ]
+                    },
+                    {
+                        name: "Hyena",
+                        image: "https://i.imgur.com/QoBseW3.png", // Placeholder image
+                        description: "Penjaga batas yang tak tergoyahkan, pecahkan pertahanannya dengan kondisi batas.",
+                        pointsBonus: 30,
+                        questions: [
+                            { question: "Apa yang terjadi pada komponen tangensial dari medan magnetik H pada antarmuka antara dua media yang berbeda jika ada kepadatan arus permukaan? (Bab 3.9)", options: ["Kontinu", "Diskontinu", "Selalu nol", "Selalu tak hingga"], answer: "Diskontinu", hint: "Ini adalah salah satu kondisi batas Maxwell." },
+                            { question: "Apa padanan magnetik dari permitivitas, yang menggambarkan kemampuan suatu material untuk mendukung medan magnetik?", options: ["Permeabilitas", "Konduktivitas", "Resistivitas", "Suseptibilitas"], answer: "Permeabilitas", hint: "Dilambangkan dengan $\\mu$." },
+                            { question: "Dalam dielektrik sempurna, berapa nilai konduktivitas?", options: ["Tak terbatas", "Sangat besar", "Nol", "Bervariasi"], answer: "Nol", hint: "Dielektrik sempurna tidak menghantarkan arus listrik." }
+                        ]
+                    },
+                    {
+                        name: "Scorpion",
+                        image: "https://placehold.co/150x150/1A1A2A/00FFFF?text=Plasma+Golem", // Placeholder image
+                        description: "Makhluk plasma yang kuat, musnahkan dengan pemahaman tentang polarisasi.",
+                        pointsBonus: 50,
+                        questions: [
+                            { question: "Vektor polarisasi $\\mathbf{P}$ dalam dielektrik didefinisikan sebagai apa?", options: ["Kerapatan fluks listrik per satuan volume", "Momen dipol listrik per satuan volume", "Gaya listrik per satuan muatan", "Kerapatan arus perpindahan"], answer: "Momen dipol listrik per satuan volume", hint: "Ini menjelaskan respons dielektrik terhadap medan listrik." },
+                            { question: "Konstanta dielektrik relatif $(\\epsilon_r)$ adalah rasio antara permitivitas material $(\\epsilon)$ dan apa?", options: ["Permeabilitas ruang hampa", "Konduktivitas material", "Permitivitas ruang hampa $(\\epsilon_0)$", "Suseptibilitas listrik"], answer: "Permitivitas ruang hampa $(\\epsilon_0)$", hint: "Ini menunjukkan seberapa kuat material dibandingkan dengan vakum." },
+                            { question: "Apakah medan listrik $\\mathbf{E}$ atau kerapatan fluks listrik $\\mathbf{D}$ yang mengalami diskontinuitas komponen normal di antarmuka dengan muatan permukaan bebas?", options: ["Hanya $\\mathbf{E}$", "Hanya $\\mathbf{D}$", "Keduanya", "Tidak keduanya"], answer: "Hanya $\\mathbf{D}$", hint: "Hukum Gauss di perbatasan." }
+                        ]
+                    }
+                ]
+            },
+            "Gelombang datar menumbuk perbatasan secara normal": {
+                monsters: [
+                    {
+                        name: "Vulture",
+                        image: "https://i.imgur.com/UqPNixM.png", // Placeholder image
+                        description: "Drone yang memantulkan serangan, kalahkan dengan memahami koefisien refleksi.",
+                        pointsBonus: 20,
+                        questions: [
+                            { question: "Ketika gelombang datar menumbuk konduktor sempurna secara normal, apa yang terjadi pada medan listrik di batas tersebut?", options: ["Meningkat dua kali lipat", "Menjadi nol", "Berbalik fase 90 derajat", "Melewati tanpa perubahan"], answer: "Menjadi nol", hint: "Medan listrik tidak dapat ada di dalam konduktor sempurna." },
+                            { question: "Untuk insiden normal, jika impedansi intrinsik medium kedua lebih tinggi dari medium pertama, apa yang dapat dikatakan tentang gelombang pantul (untuk medan E)?", options: ["Sejajar fase dengan gelombang datang", "Berlawanan fase dengan gelombang datang", "Menghilang", "Menjadi terpolarisasi melingkar"], answer: "Sejajar fase dengan gelombang datang", hint: "Ini mirip dengan pantulan dari ujung terbuka pada saluran transmisi." },
+                            { question: "Berapa koefisien pantul untuk gelombang datar yang menumbuk perbatasan secara normal dari suatu medium ke konduktor sempurna?", options: ["0", "1", "-1", "Tak terbatas"], answer: "-1", hint: "Ini menyiratkan pantulan penuh dengan pembalikan fase." },
+                            { question: "Ketika gelombang elektromagnetik menumbuk antarmuka secara normal, apa yang terjadi pada frekuensinya saat melintas dari satu medium ke medium lain?", options: ["Meningkat", "Menurun", "Tetap sama", "Berubah tergantung impedansi"], answer: "Tetap sama", hint: "Frekuensi adalah properti sumber." }
+                        ]
+                    },
+                    {
+                        name: "Mummy",
+                        image: "https://i.imgur.com/x4ydt8r.png", // Placeholder image
+                        description: "Entitas yang membengkokkan gelombang, hancurkan dengan perhitungan transmisi.",
+                        pointsBonus: 30,
+                        questions: [
+                            { question: "Koefisien refleksi $\\Gamma$ untuk insiden normal didefinisikan sebagai rasio apa?", options: ["Medan listrik datang ke medan listrik pantul", "Impedansi intrinsik ke frekuensi", "Medan listrik pantul ke medan listrik datang", "Koefisien transmisi ke koefisien refleksi"], answer: "Medan listrik pantul ke medan listrik datang", hint: "Ini adalah rasio amplitudo." },
+                            { question: "Koefisien transmisi $\\tau$ untuk insiden normal didefinisikan sebagai rasio apa?", options: ["Medan listrik datang ke medan listrik tertransmisi", "Medan listrik tertransmisi ke medan listrik datang", "Impedansi intrinsik ke kecepatan", "Fluks daya datang ke fluks daya tertransmisi"], answer: "Medan listrik tertransmisi ke medan listrik datang", hint: "Ini adalah rasio amplitudo gelombang yang melewati." },
+                            { question: "Jika koefisien refleksi gelombang listrik adalah $-1$, ini menunjukkan bahwa gelombang pantul memiliki fase yang bagaimana relatif terhadap gelombang datang?", options: ["Sama fase", "Berlawanan fase (180 derajat)", "Fase 90 derajat", "Tidak ada hubungan fase"], answer: "Berlawanan fase (180 derajat)", hint: "Ini adalah pantulan dari media yang sangat padat (elektromagnetik)." }
+                        ]
+                    },
+                    {
+                        name: "Deceased",
+                        image: "https://i.imgur.com/hzDhxzZ.png", // Placeholder image
+                        description: "Penguasa impedansi, kalahkan dengan mencocokkan resistansinya.",
+                        pointsBonus: 50,
+                        questions: [
+                            { question: "Keadaan di mana koefisien refleksi adalah nol disebut apa?", options: ["Pantulan total", "Transmisi total", "Impedansi tak cocok", "Gelombang berdiri"], answer: "Transmisi total", hint: "Semua energi lewat." },
+                            { question: "Bagaimana hubungan antara koefisien transmisi $\\tau$ dan koefisien refleksi $\\Gamma$ untuk insiden normal?", options: ["$\\tau = 1 + \\Gamma$", "$\\tau = 1 - \\Gamma$", "$\\tau = \\Gamma - 1$", "$\\tau = \\Gamma^2$"], answer: "$\\tau = 1 + \\Gamma$", hint: "Ini adalah hubungan fundamental." },
+                            { question: "Impedansi intrinsik suatu medium ($\\eta$) diberikan oleh rumus apa?", options: ["$\\sqrt{\\mu / \\epsilon}$", "$\\sqrt{\\epsilon / \\mu}$", "$1 / \\sigma$", "$\\omega \\mu$"], answer: "$\\sqrt{\\mu / \\epsilon}$", hint: "Ini mirip dengan impedansi karakteristik transmisi." }
+                        ]
+                    }
+                ]
+            },
+            "Gelombang datar menumbuk perbatasan secara sembarang": {
+                monsters: [
+                    {
+                        name: "Snake",
+                        image: "https://i.imgur.com/OnimH3O.png", // Placeholder image
+                        description: "Penjalin distorsi yang membengkokkan ruang, luruskan dengan hukum Snell.",
+                        pointsBonus: 20,
+                        questions: [
+                            { question: "Hukum apa yang mengatur hubungan antara sudut datang dan sudut bias ketika gelombang melintasi batas antara dua medium?", options: ["Hukum Coulomb", "Hukum Snell", "Hukum Ampere", "Hukum Faraday"], answer: "Hukum Snell", hint: "Hukum ini sering digunakan dalam optik." },
+                            { question: "Untuk insiden miring, jika medan listrik tegak lurus terhadap bidang datang, polarisasi ini disebut apa?", options: ["Polarisasi paralel (TM)", "Polarisasi tegak lurus (TE)", "Polarisasi elips", "Polarisasi melingkar"], answer: "Polarisasi tegak lurus (TE)", hint: "TE singkatan dari Transverse Electric." },
+                            { question: "Untuk insiden miring, jika medan listrik sejajar dengan bidang datang, polarisasi ini disebut apa?", options: ["Polarisasi tegak lurus (TE)", "Polarisasi paralel (TM)", "Polarisasi elips", "Polarisasi melingkar"], answer: "Polarisasi paralel (TM)", hint: "TM singkatan dari Transverse Magnetic." },
+                            { question: "Sudut datang $(\\theta_i)$ dan sudut bias $(\\theta_t)$ dihubungkan oleh hukum apa, yang melibatkan indeks bias $(n_1, n_2)$ atau permitivitas $(\\epsilon_1, \\epsilon_2)$?", options: ["Hukum Gauss", "Hukum Faraday", "Hukum Snell", "Hukum Coulomb"], answer: "Hukum Snell", hint: "Ini adalah hubungan trigonometri." }
+                        ]
+                    },
+                    {
+                        name: "Hyena",
+                        image: "https://i.imgur.com/QoBseW3.png", // Placeholder image
+                        description: "Makhluk yang memanipulasi fase, singkirkan dengan memahami refleksi total.",
+                        pointsBonus: 30,
+                        questions: [
+                            { question: "Apa yang terjadi ketika sudut datang melebihi sudut kritis pada antarmuka dielektrik tanpa rugi?", options: ["Refleksi parsial", "Transmisi parsial", "Refleksi total internal", "Dispersi"], answer: "Refleksi total internal", hint: "Fenomena yang digunakan dalam serat optik." },
+                            { question: "Sudut di mana koefisien refleksi untuk polarisasi paralel (TM) menjadi nol disebut apa?", options: ["Sudut kritis", "Sudut datang", "Sudut bias", "Sudut Brewster"], answer: "Sudut Brewster", hint: "Pada sudut ini, tidak ada pantulan gelombang TM." },
+                            { question: "Jika bidang datang adalah bidang x-z dan gelombang merambat di arah +z, maka polarisasi TE (Transverse Electric) berarti medan listrik berarah?", options: ["Searah sumbu x", "Searah sumbu y", "Searah sumbu z", "Dalam bidang x-z"], answer: "Searah sumbu y", hint: "Medan E tegak lurus terhadap bidang datang." }
+                        ]
+                    },
+                    {
+                        name: "Scorpion",
+                        image: "https://i.imgur.com/p8vy4lG.png", // Placeholder image
+                        description: "Mirage kuantum yang mengaburkan realitas, hilangkan dengan komponen medan yang tepat.",
+                        pointsBonus: 50,
+                        questions: [
+                            { question: "Jika bidang datang adalah bidang x-z dan gelombang merambat di arah +z, maka polarisasi TM (Transverse Magnetic) berarti medan magnetik berarah?", options: ["Searah sumbu x", "Searah sumbu y", "Searah sumbu z", "Dalam bidang x-z"], answer: "Searah sumbu y", hint: "Medan H tegak lurus terhadap bidang datang." },
+                            { question: "Komponen medan listrik atau magnetik yang tegak lurus terhadap bidang datang disebut apa?", options: ["Komponen tangensial", "Komponen normal", "Komponen paralel", "Komponen tegak lurus"], answer: "Komponen tegak lurus", hint: "Ini adalah istilah yang jelas." },
+                            { question: "Komponen medan listrik atau magnetik yang sejajar dengan bidang datang disebut apa?", options: ["Komponen tangensial", "Komponen normal", "Komponen paralel", "Komponen tegak lurus"], answer: "Komponen paralel", hint: "Ini adalah istilah yang jelas." }
+                        ]
+                    }
+                ]
+            }
+        };
+
+        let currentMode = null; // Track the current mode
+        let currentModeMonsters = []; // Array of monster objects for the current mode
+        let currentMonsterIndex = 0; // Index of the current monster in currentModeMonsters
+        let currentMonsterQuestionsAnswered = 0; // Questions answered correctly for the current monster
+
+        let currentQuestionIndex = 0; // Index of the current question WITHIN the current monster's questions
+        let lives = 3;
+        let points = 0;
+        let quizActive = true;
+        let answeredCurrentQuestion = false; // Flag to indicate if current question has been answered (correctly or all attempts failed)
+        let attemptsLeft = 3; // Number of attempts for the current question
+
+        const mainMenuContainer = document.getElementById('mainMenuContainer');
+        const quizContainer = document.getElementById('quizContainer');
+
+        const questionText = document.getElementById('questionText');
+        const optionsContainer = document.getElementById('optionsContainer');
+        const feedbackMessage = document.getElementById('feedbackMessage');
+        const livesDisplay = document.getElementById('lives');
+        const pointsDisplay = document.getElementById('points');
+        const hintButton = document.getElementById('hintButton');
+        const restartButton = document.getElementById('restartButton');
+        const progressBar = document.getElementById('progressBar');
+        const messageBox = document.getElementById('messageBox');
+        const messageText = document.getElementById('messageText');
+        const messageBoxButton = document.getElementById('messageBoxButton');
+
+        // Monster UI elements
+        const monsterDisplay = document.getElementById('monsterDisplay');
+        const monsterName = document.getElementById('monsterName');
+        const monsterImage = document.getElementById('monsterImage');
+        const monsterDescription = document.getElementById('monsterDescription');
+        const monsterHealthBar = document.getElementById('monsterHealthBar');
+        const monsterQuestionCounter = document.getElementById('monsterQuestionCounter');
+
+
+        // Function to shuffle an array (Fisher-Yates algorithm)
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]]; // Swap elements
+            }
+            return array;
+        }
+
+        // Function to display pop-up messages
+        function showMessage(message, callback) {
+            messageText.textContent = message;
+            messageBox.style.display = 'block';
+            messageBoxButton.onclick = () => {
+                messageBox.style.display = 'none';
+                if (callback) callback();
+            };
+        }
+
+
+        // Function to start a new game for a selected mode
+        window.selectModeAndStart = function(modeName) {
+            if (!questionBank[modeName]) {
+                console.error("Mode tidak ditemukan:", modeName);
+                showMessage("Mode kuis tidak valid. Silakan pilih mode yang lain.");
+                return;
+            }
+            resetGameVariables(modeName); // Reset game state and set the mode
+            currentModeMonsters = JSON.parse(JSON.stringify(questionBank[modeName].monsters)); // Deep copy to allow shuffling monster's questions
+            spawnMonster(false); // false means new game, shuffle monster questions
+            showQuiz(); // Show quiz container
+            // displayQuestion() is called by spawnMonster
+            updateDisplay(); // Update UI elements
+        }
+
+        // Reset game variables for a new game or selected mode
+        function resetGameVariables(mode) {
+            currentMode = mode;
+            currentMonsterIndex = 0;
+            currentMonsterQuestionsAnswered = 0;
+            currentQuestionIndex = 0;
+            lives = 3;
+            points = 0;
+            quizActive = true;
+            answeredCurrentQuestion = false;
+            attemptsLeft = 3;
+            console.log(`Starting new game in mode: ${currentMode}.`);
+        }
+
+
+        // Removed saveLeaderboardScore function and its imports
+        // import { collection, query, orderBy, limit, getDocs } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js"; // Removed
+
+        // Spawn a new monster or resume current monster
+        function spawnMonster(isResuming) {
+            if (currentMonsterIndex >= currentModeMonsters.length) {
+                endGame(true); // All monsters defeated
+                return;
+            }
+
+            const currentMonster = currentModeMonsters[currentMonsterIndex];
+            monsterName.textContent = currentMonster.name;
+            monsterImage.src = currentMonster.url || currentMonster.image; // Use .url or .image
+            monsterDescription.textContent = currentMonster.description;
+
+            // Only shuffle questions if it's a new monster spawn (not resuming)
+            // If resuming, we rely on the saved currentQuestionIndex to point to the correct question
+            if (!isResuming) {
+                shuffleArray(currentMonster.questions);
+            }
+
+            // Reset current question index for the new monster (or if it's new game)
+            // If resuming, currentQuestionIndex should already be correct from loaded state.
+            if (!isResuming) {
+                currentQuestionIndex = 0;
+                currentMonsterQuestionsAnswered = 0; // Reset answered count for new monster
+            }
+
+
+            displayQuestion();
+            updateMonsterDisplay();
+        }
+
+        // Display current question from the current monster
+        function displayQuestion() {
+            const currentMonster = currentModeMonsters[currentMonsterIndex];
+
+            // If all questions for the current monster are answered, defeat it
+            // This check is important here in case load state causes it to be true
+            if (currentQuestionIndex >= currentMonster.questions.length) {
+                defeatMonster();
+                return;
+            }
+
+            const q = currentMonster.questions[currentQuestionIndex];
+            questionText.innerHTML = q.question;
+            // Render MathJax equations for the question text
+            if (typeof MathJax !== 'undefined' && MathJax.typeset) {
+                MathJax.typeset([questionText]);
+            }
+
+            optionsContainer.innerHTML = '';
+            // feedbackMessage.textContent is cleared in nextQuestion() or when selecting new question via spawnMonster
+            hintButton.disabled = points < 10 || answeredCurrentQuestion;
+            answeredCurrentQuestion = false;
+
+            console.log(`--- Displaying Question ${currentQuestionIndex + 1}/${currentMonster.questions.length} for Monster: ${currentMonster.name} ---`);
+            console.log(`Initial lives: ${lives}, attemptsLeft: ${attemptsLeft}`);
+
+            const optionElements = []; // Collect option buttons to typeset them all at once
+            q.options.forEach(option => {
+                const button = document.createElement('button');
+                button.innerHTML = option; // Use innerHTML to render LaTeX in options
+                button.dataset.originalOption = option; // Store original text for highlighting comparison
+                button.classList.add('option-button');
+                button.onclick = () => selectOption(option, q.answer); // Pass original option string
+                optionsContainer.appendChild(button);
+                optionElements.push(button); // Add button to the array
+            });
+
+            // Render MathJax equations for the option buttons
+            if (typeof MathJax !== 'undefined' && MathJax.typeset) {
+                MathJax.typeset(optionElements);
+            }
+
+            updateDisplay();
+        }
+
+        // Select option and check answer
+        function selectOption(selectedOptionText, correctAnswer) {
+            if (answeredCurrentQuestion || !quizActive) return;
+
+            const currentButtons = Array.from(optionsContainer.children);
+            // Clear previous highlights
+            currentButtons.forEach(button => {
+                button.classList.remove('correct', 'incorrect');
+            });
+
+            if (selectedOptionText === correctAnswer) {
+                points += 10; // Regular points for correct answer
+                currentMonsterQuestionsAnswered++; // Monster takes damage
+                feedbackMessage.textContent = 'Benar! Monster menerima damage!';
+                feedbackMessage.style.color = 'var(--color-correct)';
+                highlightCorrectOption(correctAnswer);
+                disableOptions();
+                answeredCurrentQuestion = true;
+                console.log(`Correct answer! Points: ${points}, Lives: ${lives}, Monster questions answered: ${currentMonsterQuestionsAnswered}`);
+                setTimeout(() => nextQuestionOrDefeatMonster(), 2000); // Auto-advance or defeat monster
+            } else {
+                attemptsLeft--;
+                highlightIncorrectOption(selectedOptionText);
+                console.log(`Incorrect! Attempts left: ${attemptsLeft}, Lives: ${lives}`);
+
+                if (attemptsLeft > 0) {
+                    feedbackMessage.textContent = `Salah! Sisa kesempatan: ${attemptsLeft}`;
+                    feedbackMessage.style.color = 'var(--color-incorrect)';
+                } else {
+                    lives--; // Player loses a life
+                    feedbackMessage.textContent = `Salah! Jawaban benar adalah: ${correctAnswer}. Nyawa berkurang 1.`;
+                    feedbackMessage.style.color = 'var(--color-incorrect)';
+                    highlightCorrectOption(correctAnswer);
+                    disableOptions();
+                    answeredCurrentQuestion = true;
+                    console.log(`All attempts exhausted! New lives: ${lives}`);
+                    console.log("Setting timeout for next question after losing a life (5000ms)");
+                    setTimeout(() => nextQuestionOrDefeatMonster(), 5000); // Auto-advance after 5 seconds when life is lost
+                }
+            }
+
+            updateDisplay();
+            updateMonsterDisplay(); // Update monster health bar
+            hintButton.disabled = true; // Disable hint after attempting an answer
+        }
+
+        // Disable all options after answer selection or all attempts exhausted
+        function disableOptions() {
+            Array.from(optionsContainer.children).forEach(button => {
+                button.disabled = true;
+            });
+        }
+
+        // Highlight correct answer button based on original text stored in dataset
+        function highlightCorrectOption(correctAnswerText) {
+            Array.from(optionsContainer.children).forEach(button => {
+                if (button.dataset.originalOption === correctAnswerText) {
+                    button.classList.add('correct');
+                }
+            });
+        }
+
+        // Highlight incorrect selected option button based on original text stored in dataset
+        function highlightIncorrectOption(incorrectOptionText) {
+            Array.from(optionsContainer.children).forEach(button => {
+                if (button.dataset.originalOption === incorrectOptionText) {
+                    button.classList.add('incorrect');
+                }
+            });
+        }
+
+        // Update UI display (lives, points, general progress bar, monster health/questions)
+        function updateDisplay() {
+            livesDisplay.textContent = lives;
+            pointsDisplay.textContent = points;
+            
+            // Calculate overall quiz progress (across all monsters)
+            const totalQuestionsInMode = currentModeMonsters.reduce((sum, monster) => sum + monster.questions.length, 0);
+            let questionsAnsweredOverall = 0;
+            for(let i = 0; i < currentMonsterIndex; i++) {
+                questionsAnsweredOverall += currentModeMonsters[i].questions.length;
+            }
+            questionsAnsweredOverall += currentMonsterQuestionsAnswered;
+            
+            const progress = totalQuestionsInMode > 0 ? (questionsAnsweredOverall / totalQuestionsInMode) * 100 : 0;
+            progressBar.style.width = `${progress}%`;
+            
+            hintButton.disabled = points < 10 || answeredCurrentQuestion;
+
+            if (lives <= 0) {
+                endGame(false);
+            }
+        }
+
+        // Update monster specific display
+        function updateMonsterDisplay() {
+            if (currentMonsterIndex < currentModeMonsters.length) {
+                const currentMonster = currentModeMonsters[currentMonsterIndex];
+                const questionsRemaining = currentMonster.questions.length - currentMonsterQuestionsAnswered;
+                monsterQuestionCounter.textContent = `Pertanyaan tersisa: ${questionsRemaining}/${currentMonster.questions.length}`;
+
+                const healthPercentage = (questionsRemaining / currentMonster.questions.length) * 100;
+                monsterHealthBar.style.width = `${healthPercentage}%`;
+            }
+        }
+
+        // Use hint
+        function useHint() {
+            if (points < 10 || answeredCurrentQuestion) {
+                showMessage("Anda tidak memiliki cukup poin atau sudah menjawab pertanyaan ini.");
+                return;
+            }
+
+            points -= 10;
+            const currentMonster = currentModeMonsters[currentMonsterIndex];
+            const q = currentMonster.questions[currentQuestionIndex];
+            showMessage(`Petunjuk: ${q.hint}`);
+            updateDisplay();
+            hintButton.disabled = true; // Disable after use
+        }
+
+        // Advance to next question or defeat monster
+        function nextQuestionOrDefeatMonster() {
+            if (!quizActive) return;
+
+            feedbackMessage.textContent = ''; // Clear feedback
+
+            const currentMonster = currentModeMonsters[currentMonsterIndex];
+
+            // If all questions for the current monster have been answered correctly
+            if (currentMonsterQuestionsAnswered >= currentMonster.questions.length) {
+                defeatMonster();
+                return;
+            }
+
+            // Otherwise, advance to the next question for the current monster
+            attemptsLeft = 3; // Reset attempts for new question
+            currentQuestionIndex++;
+
+            if (currentQuestionIndex < currentMonster.questions.length) {
+                displayQuestion();
+            } else {
+                // This scenario should ideally be caught by the currentMonsterQuestionsAnswered check above,
+                // but as a fallback, if questions run out but monster not officially defeated, defeat it.
+                defeatMonster();
+            }
+        }
+
+        // Handle monster defeat logic
+        function defeatMonster() {
+            const defeatedMonster = currentModeMonsters[currentMonsterIndex];
+            points += defeatedMonster.pointsBonus; // Award bonus points
+            updateDisplay(); // Update points display
+
+            showMessage(`Anda mengalahkan ${defeatedMonster.name}! Mendapat ${defeatedMonster.pointsBonus} poin bonus!`, () => {
+                currentMonsterIndex++; // Advance to next monster
+
+                if (currentMonsterIndex < currentModeMonsters.length) {
+                    currentMonsterQuestionsAnswered = 0; // Reset answered count for new monster
+                    spawnMonster(false); // Spawn next monster (and shuffle its questions)
+                } else {
+                    endGame(true); // All monsters in this mode defeated
+                }
+            });
+        }
+
+
+        // End the game
+        function endGame(won) {
+            quizActive = false;
+            hintButton.style.display = 'none';
+            disableOptions();
+
+            let finalMessage = "";
+            if (won) {
+                finalMessage = `Selamat! Anda berhasil menyelesaikan kuis ${currentMode} dengan mengalahkan semua monster! Total ${points} poin dan ${lives} nyawa tersisa!`;
+                // saveLeaderboardScore(points, currentMode); // Removed call to leaderboard saving
+            } else {
+                finalMessage = `Game Selesai! Nyawa Anda habis saat bertarung di mode ${currentMode}. Anda mendapatkan ${points} poin.`;
+                // saveLeaderboardScore(points, currentMode); // Removed call to leaderboard saving
+            }
+            // Set currentMode to null when game ends to ensure new game starts from mode selection
+            currentMode = null;
+
+            showMessage(finalMessage, showMainMenu); // Go back to main menu after message
+        }
+
+        // Show Main Menu
+        function showMainMenu() {
+            quizContainer.classList.add('hidden');
+            mainMenuContainer.classList.remove('hidden');
+            restartButton.style.display = 'none';
+            // Clear monster display when returning to main menu
+            monsterName.textContent = '';
+            monsterImage.src = '';
+            monsterDescription.textContent = '';
+            monsterQuestionCounter.textContent = '';
+            monsterHealthBar.style.width = '100%';
+        }
+
+        // Show Quiz Game
+        function showQuiz() {
+            mainMenuContainer.classList.add('hidden');
+            quizContainer.classList.remove('hidden');
+            hintButton.style.display = 'inline-block'; // Ensure hint button is visible for quiz
+        }
+    </script>
+</body>
+</html>

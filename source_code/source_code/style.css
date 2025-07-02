@@ -1,0 +1,404 @@
+:root {
+            --color-bg-dark: #0A0A10;
+            --color-neon-blue: #00FFFF;
+            --color-neon-purple: #9D00FF;
+            --color-neon-green: #00FF00;
+            --color-text-light: #E0E0E0;
+            --color-border-glow: #00BFFF;
+            --color-correct: #32CD32; /* LimeGreen */
+            --color-incorrect: #FF4500; /* OrangeRed */
+        }
+
+        body {
+            font-family: 'Orbitron', sans-serif; /* Font utama untuk nuansa scifi */
+            background: linear-gradient(135deg, var(--color-bg-dark), #1A1A2A); /* Background gelap dengan gradien */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            color: var(--color-text-light);
+            padding: 10px; /* Reduced padding for overall body */
+            box-sizing: border-box;
+            overflow-x: hidden; /* Prevent horizontal scrolling */
+        }
+        .main-menu-container, .quiz-container {
+            background-color: rgba(10, 10, 20, 0.7); /* Background lebih gelap, semi-transparan */
+            border-radius: 12px; /* Sedikit lebih angular dari sebelumnya */
+            padding: 25px; /* Reduced padding for containers */
+            box-shadow: 0 0 25px rgba(0, 255, 255, 0.5), 0 0 50px rgba(157, 0, 255, 0.3); /* Neon glow effect */
+            border: 2px solid var(--color-border-glow); /* Border bercahaya */
+            width: 100%;
+            max-width: 650px; /* Slightly smaller max-width */
+            text-align: center;
+            backdrop-filter: blur(8px) saturate(1.5); /* Efek blur yang lebih kuat */
+            -webkit-backdrop-filter: blur(8px) saturate(1.5);
+            position: relative;
+            z-index: 1;
+            animation: container-glow 3s infinite alternate; /* Animasi glow pada container */
+        }
+
+        @keyframes container-glow {
+            from {
+                box-shadow: 0 0 20px var(--color-neon-blue), 0 0 30px var(--color-neon-purple);
+            }
+            to {
+                box-shadow: 0 0 30px var(--color-neon-purple), 0 0 40px var(--color-neon-blue);
+            }
+        }
+
+        .main-menu-container h1 {
+            font-family: 'Press Start 2P', cursive;
+            font-size: 2em; /* Adjusted font size */
+            color: var(--color-neon-green);
+            text-shadow: 0 0 15px var(--color-neon-green), 0 0 25px var(--color-neon-blue);
+            margin-bottom: 30px; /* Adjusted margin */
+            line-height: 1.2;
+        }
+
+        .mode-map-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); /* Adjusted minmax for smaller screens */
+            gap: 20px; /* Adjusted gap */
+            margin-top: 25px; /* Adjusted margin */
+            padding: 15px; /* Adjusted padding */
+            background-color: rgba(0, 255, 255, 0.05); /* Background untuk area peta */
+            border-radius: 10px;
+            border: 1px dashed rgba(0, 255, 255, 0.3);
+        }
+
+        .map-location {
+            background-color: rgba(157, 0, 255, 0.15); /* Background lokasi mode */
+            border: 2px solid var(--color-neon-purple);
+            border-radius: 10px;
+            padding: 15px; /* Adjusted padding */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 10px rgba(157, 0, 255, 0.3);
+        }
+
+        .map-location:hover {
+            background-color: rgba(157, 0, 255, 0.3);
+            transform: translateY(-5px) scale(1.02); /* Adjusted transform */
+            box-shadow: 0 0 20px var(--color-neon-purple), 0 0 30px rgba(0, 255, 255, 0.5);
+        }
+
+        .map-icon {
+            color: var(--color-neon-blue); /* Warna ikon */
+            margin-bottom: 10px; /* Adjusted margin */
+            width: 50px; /* Adjusted icon size */
+            height: 50px; /* Adjusted icon size */
+            filter: drop-shadow(0 0 8px var(--color-neon-blue)); /* Efek glow pada ikon */
+        }
+        .map-icon svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        .map-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1em; /* Adjusted font size */
+            font-weight: bold;
+            color: var(--color-text-light);
+            text-shadow: 0 0 5px var(--color-text-light);
+            text-transform: uppercase;
+        }
+
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px; /* Adjusted margin */
+            font-size: 1.1em; /* Adjusted font size */
+            font-family: 'Press Start 2P', cursive; /* Font pixelated untuk header */
+            color: var(--color-neon-green); /* Warna neon untuk teks header */
+            text-shadow: 0 0 8px var(--color-neon-green); /* Efek glow teks */
+        }
+
+        /* Monster Display Area */
+        .monster-display-area {
+            background-color: rgba(0, 0, 0, 0.4);
+            border: 2px solid var(--color-neon-purple);
+            border-radius: 10px;
+            padding: 10px; /* Adjusted padding */
+            margin-bottom: 20px; /* Adjusted margin */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            box-shadow: 0 0 15px rgba(157, 0, 255, 0.5);
+        }
+
+        .monster-display-area h2 {
+            font-family: 'Press Start 2P', cursive;
+            color: var(--color-neon-green);
+            font-size: 1.5em; /* Adjusted font size */
+            margin-bottom: 8px; /* Adjusted margin */
+            text-shadow: 0 0 10px var(--color-neon-green);
+        }
+
+        .monster-img {
+            width: 120px; /* Adjusted size */
+            height: 120px; /* Adjusted size */
+            object-fit: contain;
+            margin-bottom: 10px; /* Adjusted margin */
+            filter: drop-shadow(0 0 15px var(--color-neon-blue));
+            animation: floating-monster 3s ease-in-out infinite alternate;
+        }
+
+        @keyframes floating-monster {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(-8px); } /* Adjusted float distance */
+        }
+
+        .monster-description {
+            font-size: 0.85em; /* Adjusted font size */
+            color: var(--color-text-light);
+            margin-bottom: 8px; /* Adjusted margin */
+            text-align: center;
+        }
+
+        .monster-health-bar-container {
+            width: 90%; /* Increased width */
+            background-color: #333;
+            border: 1px solid var(--color-neon-blue);
+            border-radius: 5px;
+            height: 12px; /* Slightly thinner */
+            overflow: hidden;
+            margin-bottom: 8px; /* Adjusted margin */
+            box-shadow: 0 0 8px var(--color-neon-blue);
+        }
+
+        .monster-health-bar {
+            height: 100%;
+            width: 100%; /* Starts full */
+            background-color: var(--color-correct); /* Green for health */
+            transition: width 0.5s ease-out;
+            box-shadow: 0 0 5px var(--color-correct);
+        }
+
+        .monster-question-counter {
+            font-size: 1em; /* Adjusted font size */
+            font-weight: bold;
+            color: var(--color-neon-blue);
+            text-shadow: 0 0 5px var(--color-neon-blue);
+        }
+
+        .progress-bar-container {
+            width: 100%;
+            background-color: rgba(0, 255, 255, 0.1); /* Background lebih transparan */
+            border-radius: 8px;
+            height: 15px; /* Slightly thinner */
+            margin-top: 10px; /* Adjusted margin */
+            overflow: hidden;
+            border: 1px solid var(--color-neon-blue);
+            box-shadow: 0 0 10px var(--color-neon-blue);
+        }
+        .progress-bar {
+            height: 100%;
+            width: 0%;
+            background-color: var(--color-neon-green);
+            border-radius: 8px;
+            transition: width 0.5s ease-in-out;
+            box-shadow: 0 0 8px var(--color-neon-green); /* Efek glow pada progress bar */
+        }
+        .question-section {
+            margin-bottom: 25px; /* Adjusted margin */
+        }
+        .question-text {
+            font-size: 1.3em; /* Adjusted font size */
+            margin-bottom: 20px; /* Adjusted margin */
+            font-weight: bold;
+            line-height: 1.4; /* Adjusted line height */
+            color: var(--color-neon-blue); /* Warna neon untuk pertanyaan */
+            text-shadow: 0 0 10px var(--color-neon-blue); /* Efek glow teks pertanyaan */
+        }
+        .options-container {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 15px; /* Adjusted gap */
+            margin-bottom: 25px; /* Adjusted margin */
+        }
+        .option-button {
+            background-color: rgba(0, 191, 255, 0.1); /* Biru muda transparan */
+            border: 2px solid var(--color-neon-blue);
+            border-radius: 8px; /* Lebih angular */
+            padding: 15px 20px; /* Adjusted padding */
+            font-size: 1em; /* Adjusted font size */
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: var(--color-text-light);
+            text-align: left;
+            box-shadow: 0 0 10px rgba(0, 191, 255, 0.3); /* Subtle glow */
+            font-family: 'Orbitron', sans-serif;
+            line-height: 1.3; /* Adjusted line height for readability */
+        }
+        .option-button:hover {
+            background-color: rgba(0, 191, 255, 0.3);
+            transform: translateY(-3px) scale(1.01); /* Adjusted effect */
+            box-shadow: 0 0 15px var(--color-neon-blue), 0 0 25px var(--color-neon-purple); /* Glow yang lebih kuat */
+        }
+        .option-button.correct {
+            background-color: var(--color-correct); /* Hijau neon */
+            border-color: var(--color-correct);
+            box-shadow: 0 0 15px var(--color-correct); /* Glow hijau */
+        }
+        .option-button.incorrect {
+            background-color: var(--color-incorrect); /* Merah/oranye neon */
+            border-color: var(--color-incorrect);
+            box-shadow: 0 0 15px var(--color-incorrect); /* Glow merah */
+        }
+        .feedback-message {
+            margin-top: 10px; /* Adjusted margin */
+            font-size: 1.1em; /* Adjusted font size */
+            font-weight: bold;
+            text-shadow: 0 0 8px currentColor; /* Glow sesuai warna teks */
+        }
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 20px; /* Adjusted gap */
+        }
+        .control-button {
+            background-color: var(--color-neon-purple);
+            color: white;
+            padding: 12px 25px; /* Adjusted padding */
+            border-radius: 8px; /* Adjusted border-radius */
+            border: 2px solid var(--color-neon-purple);
+            font-size: 1em; /* Adjusted font size */
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+            box-shadow: 0 0 15px var(--color-neon-purple); /* Glow tombol */
+            font-family: 'Orbitron', sans-serif;
+            text-transform: uppercase;
+        }
+        .control-button:hover {
+            background-color: #A020F0; /* Sedikit lebih gelap */
+            transform: translateY(-2px); /* Adjusted transform */
+            box-shadow: 0 0 20px var(--color-neon-purple), 0 0 30px rgba(157, 0, 255, 0.5);
+        }
+        .control-button:disabled {
+            background-color: #444;
+            border-color: #555;
+            cursor: not-allowed;
+            box-shadow: none;
+            color: #aaa;
+        }
+        .message-box {
+            background-color: rgba(10, 10, 20, 0.9);
+            border-radius: 15px;
+            padding: 25px; /* Adjusted padding */
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 1000;
+            box-shadow: 0 0 30px rgba(0, 255, 255, 0.7); /* Glow kuat untuk pesan */
+            color: var(--color-neon-blue);
+            font-size: 1.1em; /* Adjusted font size */
+            text-align: center;
+            display: none; /* Hidden by default */
+            border: 2px solid var(--color-neon-green);
+        }
+        .message-box button {
+            background-color: var(--color-neon-green);
+            color: var(--color-bg-dark);
+            padding: 10px 20px; /* Adjusted padding */
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            margin-top: 15px; /* Adjusted margin */
+            font-size: 1em; /* Adjusted font size */
+            font-family: 'Orbitron', sans-serif;
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 0 10px var(--color-neon-green);
+        }
+        .message-box button:hover {
+            background-color: #00A300; /* Hijau lebih gelap */
+            box-shadow: 0 0 15px var(--color-neon-green), 0 0 25px rgba(0, 255, 0, 0.5);
+        }
+        .hidden {
+            display: none;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .main-menu-container h1 {
+                font-size: 1.8em; /* Further adjustment for tablets */
+            }
+            .quiz-container {
+                padding: 20px; /* Further adjustment for tablets */
+                max-width: 98%; /* Allow more width */
+            }
+            .question-text {
+                font-size: 1.2em; /* Further adjustment */
+            }
+            .option-button {
+                padding: 12px 15px; /* Further adjustment */
+                font-size: 0.95em; /* Further adjustment */
+            }
+            .control-button {
+                padding: 10px 20px; /* Further adjustment */
+                font-size: 0.9em; /* Further adjustment */
+            }
+            .header {
+                font-size: 0.9em; /* Further adjustment */
+            }
+            .message-box {
+                font-size: 0.9em;
+                padding: 20px;
+            }
+            .monster-display-area h2 {
+                font-size: 1.3em;
+            }
+            .monster-img {
+                width: 100px;
+                height: 100px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 5px; /* Minimal padding on very small screens */
+            }
+            .main-menu-container, .quiz-container {
+                padding: 15px; /* Smallest padding */
+            }
+            .main-menu-container h1 {
+                font-size: 1.5em; /* Smallest font size for title */
+            }
+            .question-text {
+                font-size: 1em; /* Smallest font size for questions */
+            }
+            .option-button {
+                padding: 10px; /* Smallest padding for options */
+                font-size: 0.85em; /* Smallest font size for options */
+            }
+            .controls {
+                flex-direction: column;
+                gap: 10px; /* Smallest gap */
+            }
+            .control-button {
+                width: 90%; /* Take more width */
+                margin: 0 auto;
+            }
+            .mode-map-grid {
+                grid-template-columns: 1fr; /* Single column on very small screens */
+            }
+            .monster-display-area h2 {
+                font-size: 1.1em;
+            }
+            .monster-img {
+                width: 70px;
+                height: 70px;
+            }
+            .monster-health-bar-container {
+                width: 95%;
+            }
+            .monster-question-counter {
+                font-size: 0.9em;
+            }
+        }
